@@ -29,6 +29,10 @@
         .notie-container {
             box-shadow: none;
         }
+
+        .datepicker {
+            z-index: 500000;
+        }
     </style>
 </head>
 
@@ -156,7 +160,19 @@
     })();
 
     document.getElementById("colorButton").addEventListener("click", function () {
-        attention.success({msg: "hello world"});
+        let html = `
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+            <div class="d-flex flex-row justify-content-evenly" id="reservation-dates-modal">
+                <div class="p-2">
+                    <input disabled required type="text" class="form-control" name="start" id="start" placeholder="Arrival">
+                </div>
+                <div class="p-2">
+                    <input disabled required type="text" class="form-control" name="end" id="end" placeholder="Departure">
+                </div>
+            </div>
+        </form>
+        `
+        attention.custom({msg: html, title: "Choose your dates"});
     })
 
     const elem = document.getElementById('reservation-dates');
@@ -235,10 +251,48 @@
             })
         }
 
+        async function custom(c) {
+            const {
+                msg = "",
+                title = "",
+            } = c;
+
+            const {value: formValues} = await Swal.fire({
+                title: title,
+                html: msg,
+                backdrop: false,
+                focusConfirm: false,
+                showCancelButton: true,
+                willOpen: () => {
+                    const elem = document.getElementById('reservation-dates-modal');
+                    const rp = new DateRangePicker(elem, {
+                        format: "yyyy-mm-dd",
+                        showOnFocus: true,
+                    })
+                },
+                didOpen: () => {
+                    document.getElementsByClassName('swal2-actions')[0].style.zIndex = '0';
+                    document.getElementById('start').removeAttribute('disabled');
+                    document.getElementById('end').removeAttribute('disabled');
+                },
+                preConfirm: () => {
+                    return [
+                        document.getElementById('start').value,
+                        document.getElementById('end').value
+                    ]
+                }
+            })
+
+            if (formValues) {
+                Swal.fire(JSON.stringify(formValues))
+            }
+        }
+
         return {
             toast: toast,
             success: success,
-            error: error
+            error: error,
+            custom: custom
         }
     }
 
