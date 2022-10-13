@@ -14,6 +14,8 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker-bs4.min.css">
 
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+
     <style>
         .my-footer {
             height: 5em;
@@ -24,8 +26,8 @@
             font-size: 80%;
         }
 
-        .redText {
-            color: red;
+        .notie-container {
+            box-shadow: none;
         }
     </style>
 </head>
@@ -131,7 +133,7 @@
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
-
+<script src="https://unpkg.com/notie"></script>
 
 <script>
     console.log("I am printing from JavaScript");
@@ -153,18 +155,23 @@
     })();
 
     document.getElementById("colorButton").addEventListener("click", function () {
-        let myEl = document.getElementById("myParagraph");
-        if (myEl.classList.contains("redText")) {
-            myEl.classList.remove("redText");
-        } else {
-            myEl.classList.add("redText");
-        }
+        notify("This is my message", "warning");
     })
 
     const elem = document.getElementById('reservation-dates');
     const rangepicker = new DateRangePicker(elem, {
         format: "yyyy-mm-dd"
     });
+
+    function notify(msg, msgType){
+        notie.alert({
+            type: msgType, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+            text: msg,
+            // stay: Boolean, // optional, default = false
+            // time: Number, // optional, default = 3, minimum = 1,
+            // position: String // optional, default = 'top', enum: ['top', 'bottom']
+        })
+    }
 
 </script>
 
