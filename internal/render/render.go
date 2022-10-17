@@ -2,8 +2,8 @@ package render
 
 import (
 	"bytes"
-	"github.com/anras5/go_bookings/pkg/config"
-	"github.com/anras5/go_bookings/pkg/models"
+	"github.com/anras5/go_bookings/internal/config"
+	"github.com/anras5/go_bookings/internal/models"
 	"github.com/justinas/nosurf"
 	"html/template"
 	"log"

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
-	"github.com/anras5/go_bookings/pkg/config"
-	"github.com/anras5/go_bookings/pkg/handlers"
-	"github.com/anras5/go_bookings/pkg/render"
+	"github.com/anras5/go_bookings/internal/config"
+	"github.com/anras5/go_bookings/internal/handlers"
+	"github.com/anras5/go_bookings/internal/render"
 	"log"
 	"net/http"
 	"time"

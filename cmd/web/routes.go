@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/anras5/go_bookings/pkg/config"
-	"github.com/anras5/go_bookings/pkg/handlers"
+	"github.com/anras5/go_bookings/internal/config"
+	"github.com/anras5/go_bookings/internal/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"net/http"
