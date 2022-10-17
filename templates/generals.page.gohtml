@@ -41,9 +41,9 @@
 {{end}}
 
 {{define "js"}}
-<script>
-    document.getElementById("check-availability-button").addEventListener("click", function () {
-        let html = `
+    <script>
+        document.getElementById("check-availability-button").addEventListener("click", function () {
+            let html = `
         <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
             <div class="d-flex flex-row justify-content-evenly" id="reservation-dates-modal">
                 <div class="p-2">
@@ -55,21 +55,40 @@
             </div>
         </form>
         `
-        attention.custom({
-            msg: html,
-            title: "Choose your dates",
-            callback: function(result){
-                console.log("Called");
-
-                fetch('/search-availability-json')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        console.log(data.ok);
-                        console.log(data.message);
+            attention.custom({
+                msg: html,
+                title: "Choose your dates",
+                willOpen: () => {
+                    const elem = document.getElementById('reservation-dates-modal');
+                    const rp = new DateRangePicker(elem, {
+                        format: "yyyy-mm-dd",
+                        showOnFocus: true,
                     })
-            }
-        });
-    })
-</script>
+                },
+                didOpen: () => {
+                    document.getElementsByClassName('swal2-actions')[0].style.zIndex = '0';
+                    document.getElementById('start').removeAttribute('disabled');
+                    document.getElementById('end').removeAttribute('disabled');
+                },
+                callback: function (result) {
+                    console.log("Called");
+
+                    let form = document.getElementById("check-availability-form")
+                    let formData = new FormData(form);
+                    formData.append("csrf_token", "{{.CSRFToken}}");
+
+                    fetch('/search-availability-json', {
+                        method: "post",
+                        body: formData,
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            console.log(data.ok);
+                            console.log(data.message);
+                        })
+                }
+            });
+        })
+    </script>
 {{end}}
