@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/anras5/go_bookings/internal/config"
+	"github.com/anras5/go_bookings/internal/forms"
 	"github.com/anras5/go_bookings/internal/models"
 	"github.com/anras5/go_bookings/internal/render"
 	"log"
@@ -52,7 +53,13 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the reservation page
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.gohtml", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.gohtml", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// PostReservation handles the posting of the reservation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 }
 
 // Generals renders the room page
