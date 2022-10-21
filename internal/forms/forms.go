@@ -2,6 +2,7 @@ package forms
 
 import (
 	"fmt"
+	"github.com/asaskevich/govalidator"
 	"net/http"
 	"net/url"
 	"strings"
@@ -54,4 +55,11 @@ func (f *Form) MinLength(field string, length int, r *http.Request) bool {
 // Valid returns true if there are no errors, otherwise false
 func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
+}
+
+// IsEmail checks for valid email address
+func (f *Form) IsEmail(field string) {
+	if !govalidator.IsEmail(f.Get(field)) {
+		f.Errors.Add(field, "Invalid email address")
+	}
 }
