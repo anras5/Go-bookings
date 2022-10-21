@@ -64,12 +64,14 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 // PostReservation handles the posting of the reservation form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	// parse the form
 	err := r.ParseForm()
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
+	// create reservation model
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
@@ -77,8 +79,8 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		Phone:     r.Form.Get("phone"),
 	}
 
+	// validation testing
 	form := forms.New(r.PostForm)
-
 	form.Required("first_name", "last_name", "email")
 	form.MinLength("first_name", 3, r)
 	form.IsEmail("email")
@@ -94,6 +96,22 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+
+}
+
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("cannot get item from session")
+	}
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+	render.RenderTemplate(w, r, "reservation-summary.page.gohtml", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // Generals renders the room page
