@@ -1,4 +1,4 @@
-{{template "base"}}
+{{template "base" .}}
 {{define "content"}}
     <div class="container">
         <div class="row">
@@ -7,9 +7,13 @@
 
                 <form method="post" action="" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
                     <div class="form-group mt-3">
                         <label for="first_name">First Name:</label>
-                        <input class="form-control"
+                        {{with .Form.Errors.Get "first_name"}}
+                            <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}"
                                id="first_name" autocomplete="off" type='text'
                                name='first_name' value="" required>
                     </div>
@@ -38,7 +42,10 @@
                     <hr>
                     <input type="submit" class="btn btn-primary" value="Make Reservation">
                 </form>
+
+
             </div>
         </div>
+
     </div>
 {{end}}
